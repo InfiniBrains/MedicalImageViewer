@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checkout
-      - name: Checkout repository
+      - name: Checkout repository 🛒
         uses: actions/checkout@v2
         with:
           lfs: true
@@ -31,7 +31,8 @@ jobs:
 #          git reset --hard
 
       # Cache
-      - uses: actions/cache@v2
+      - name: Cache 💾
+        uses: actions/cache@v2
         with:
           path: Library
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -39,7 +40,7 @@ jobs:
             Library-
 
       # Build
-      - name: Build project
+      - name: Build project 🔨
         uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -51,7 +52,7 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/WebGL # The folder the action should deploy.
+          folder: build/WebGL/WebGL # The folder the action should deploy.
           
 #      - name: GitHub Pages
 #        env:
