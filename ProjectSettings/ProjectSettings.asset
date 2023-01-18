@@ -434,6 +434,7 @@ PlayerSettings:
   openGLRequireES32: 0
   m_TemplateCustomTags:
     BACKGROUND: 
+    HIDE_FULL_SCREEN_BUTTON: 
     OPTIMIZE_FOR_PIXEL_ART: 
     SCALE_TO_FIT: 
   mobileMTRendering:
@@ -699,7 +700,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: PROJECT:BetterMinimal
+  webGLTemplate: PROJECT:Better2020
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 0
