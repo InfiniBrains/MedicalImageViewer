@@ -53,6 +53,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/WebGL/WebGL # The folder the action should deploy.
+          single-commit: true
           
 #      - name: GitHub Pages
 #        env:
