@@ -104,7 +104,7 @@ public class ReportLoaderImage
                 if (elem > max)
                     max = elem;
             }
-            Debug.Log("min: " + min + ", max: " + max);
+            Debug.Log("GrayscalePixelDataS32 min: " + min + ", max: " + max);
             this.minValue = min;
             this.maxValue = max;
         } 
@@ -122,7 +122,7 @@ public class ReportLoaderImage
                 if (elem > max)
                     max = elem;
             }
-            Debug.Log("min: " + min + ", max: " + max);
+            Debug.Log("GrayscalePixelDataU32 min: " + min + ", max: " + max);
 
             minValue = min;
             maxValue = max;
@@ -143,7 +143,7 @@ public class ReportLoaderImage
                 if (elem > max)
                     max = elem;
             }
-            //Debug.Log("min: " + min + ", max: " + max);
+            Debug.Log("GrayscalePixelDataS16 min: " + min + ", max: " + max);
             minValue = min;
             maxValue = max;
         }
@@ -161,7 +161,7 @@ public class ReportLoaderImage
                 if (elem > max)
                     max = elem;
             }
-            //Debug.Log("min: " + min + ", max: " + max);
+            Debug.Log("GrayscalePixelDataU16 min: " + min + ", max: " + max);
             minValue = min;
             maxValue = max;
         }
@@ -179,7 +179,7 @@ public class ReportLoaderImage
                 if (elem > max)
                     max = elem;
             }
-            Debug.Log("min: " + min + ", max: " + max);
+            Debug.Log("GrayscalePixelDataU8 min: " + min + ", max: " + max);
             minValue = min;
             maxValue = max;
         }
