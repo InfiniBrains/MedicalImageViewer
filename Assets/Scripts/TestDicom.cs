@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 
 public class TestDicom : MonoBehaviour
 {
-    [SerializeField] string filePath = "/DicomFiles/CT-MONO2-16-brain.dcm";
+    // [SerializeField] string filePath = "/DicomFiles/CT-MONO2-16-brain.dcm";
     private DicomImage FileBytesToDicomImage(byte[] bytes)
     {
         using (MemoryStream ms = new MemoryStream(bytes))
@@ -46,12 +46,22 @@ public class TestDicom : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        TextAsset textAsset = Resources.Load("CT-MONO2-16-brain") as TextAsset;
+        Stream stream = new MemoryStream(textAsset.bytes);
 
-        DicomImage dicom = new DicomImage(Application.dataPath + filePath);
+        var dcmfile = DicomFile.Open(stream);
+
+        Debug.Log("dcmfile: " + dcmfile.Format);
+             
+        var dcmimg = new DicomImage(dcmfile.Dataset);
+        Debug.Log("dcmimg: " + dcmimg.PhotometricInterpretation);
+             
+        var pix = dcmimg.GetPixelData();
+        Debug.Log("pix: " + pix.Width + " " + pix.Height);
 
         ReportLoaderImage loader = new ReportLoaderImage();
 
-        loader.ExtractDataFromDicomImage(dicom);
+        loader.ExtractDataFromDicomImage(dcmimg);
 
         yield return null;
         /*UnityWebRequest dcmFileRequest = new UnityWebRequest("https://raw.githubusercontent.com/mazatsushi/FYP/master/SCE11-0353/Sample%20DICOM%20Images/CT-MONO2-16-ankle.dcm");
