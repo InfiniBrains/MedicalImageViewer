@@ -9,10 +9,15 @@ using Jint;
 using Jint.Native;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class TestDicom : MonoBehaviour
 {
-    [SerializeField] string filePath = "/DicomFiles/CT-MONO2-16-brain.dcm";
+    string filePath = "/Extensions/DICOM/Resources/CT-MONO2-16-brain.dcm";
+
+    Texture2D dicomTexture;
+    [SerializeField] Image image;
+
     private DicomImage FileBytesToDicomImage(byte[] bytes)
     {
         using (MemoryStream ms = new MemoryStream(bytes))
@@ -51,7 +56,29 @@ public class TestDicom : MonoBehaviour
 
         ReportLoaderImage loader = new ReportLoaderImage();
 
-        loader.ExtractDataFromDicomImage(dicom);
+        IPixelData pixeldata = loader.ExtractDataFromDicomImage(dicom);
+
+        // Create a new Texture2D
+        dicomTexture = new Texture2D((int)pixeldata.Width, (int)pixeldata.Height, TextureFormat.ARGB32, false);
+
+        // Set filter type, or else its really blury
+        dicomTexture.filterMode = FilterMode.Trilinear;
+
+        for (int x = 0; x < pixeldata.Width; x++)
+        {
+            for(int y = 0; y < pixeldata.Height; y++)
+            {
+                var p = pixeldata.GetPixel(x, y);
+
+                byte[] bytes = BitConverter.GetBytes(p);
+
+                dicomTexture.SetPixel(x, (int)pixeldata.Height - y, new UnityEngine.Color(bytes[0] / 255.0f, bytes[2] / 255.0f, bytes[4] / 255.0f, bytes[6] / 255.0f));
+            }
+        }
+
+        dicomTexture.Apply();
+
+        image.sprite = Sprite.Create(dicomTexture, new Rect(0, 0, dicomTexture.width, dicomTexture.height), new Vector2());
 
         yield return null;
         /*UnityWebRequest dcmFileRequest = new UnityWebRequest("https://raw.githubusercontent.com/mazatsushi/FYP/master/SCE11-0353/Sample%20DICOM%20Images/CT-MONO2-16-ankle.dcm");

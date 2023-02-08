@@ -58,7 +58,7 @@ public class ReportLoaderImage
     //    });
     //}
 
-    private void LoadFromBytes(byte[] bytes)
+    private IPixelData LoadFromBytes(byte[] bytes)
     {
         //var unzippedBytes = unzipFirstFileFromArchive(bytes);
 
@@ -67,24 +67,26 @@ public class ReportLoaderImage
             //ExtractDataFromUnzippedBytes(unzippedBytes);
         // if it isnt a zip
         //else
-            ExtractDataFromUnzippedBytes(bytes);
+          return ExtractDataFromUnzippedBytes(bytes);
     }
 
-    private void ExtractDataFromUnzippedBytes(byte[] bytes)
+    private IPixelData ExtractDataFromUnzippedBytes(byte[] bytes)
     {
         // if the zip contains a dicom
         var dicomObject = FileBytesToDicomImage(bytes);
         
         if (dicomObject != null)
         {
-            ExtractDataFromDicomImage(dicomObject);
+            return ExtractDataFromDicomImage(dicomObject);
         }
         // if the zip does not contains a dicom
         //else
-            //InfiniThread.RunOnUnityThread(() => { ExtractDataFromPngJpgImage(bytes); });
+        //InfiniThread.RunOnUnityThread(() => { ExtractDataFromPngJpgImage(bytes); });
+
+        return null;
     }
 
-    public void ExtractDataFromDicomImage(DicomImage dicomImage)
+    public IPixelData ExtractDataFromDicomImage(DicomImage dicomImage)
     {
         var pix = dicomImage.GetPixelData();
         
@@ -107,6 +109,8 @@ public class ReportLoaderImage
             Debug.Log("GrayscalePixelDataS32 min: " + min + ", max: " + max);
             this.minValue = min;
             this.maxValue = max;
+
+            return pixeldata;
         } 
         else if (pix is GrayscalePixelDataU32)
         {
@@ -126,6 +130,8 @@ public class ReportLoaderImage
 
             minValue = min;
             maxValue = max;
+
+            return pixeldata;
         }
         else if (pix is GrayscalePixelDataS16)
         {
@@ -146,6 +152,8 @@ public class ReportLoaderImage
             Debug.Log("GrayscalePixelDataS16 min: " + min + ", max: " + max);
             minValue = min;
             maxValue = max;
+
+            return pixeldata;
         }
         else if (pix is GrayscalePixelDataU16)
         {
@@ -164,6 +172,8 @@ public class ReportLoaderImage
             Debug.Log("GrayscalePixelDataU16 min: " + min + ", max: " + max);
             minValue = min;
             maxValue = max;
+
+            return pixeldata;
         }
         else if (pix is GrayscalePixelDataU8)
         {
@@ -182,7 +192,11 @@ public class ReportLoaderImage
             Debug.Log("GrayscalePixelDataU8 min: " + min + ", max: " + max);
             minValue = min;
             maxValue = max;
+
+            return pixeldata;
         }
+
+        return null;
     }
 
     private void ExtractDataFromPngJpgImage(byte[] bytes)
