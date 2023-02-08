@@ -13,9 +13,8 @@ using UnityEngine.UI;
 
 public class TestDicom : MonoBehaviour
 {
-    string filePath = "/Extensions/DICOM/Resources/CT-MONO2-16-brain.dcm";
+    //string filePath = "/Extensions/DICOM/Resources/CT-MONO2-16-brain.dcm";
 
-    Texture2D dicomTexture;
     [SerializeField] Image image;
 
     private DicomImage FileBytesToDicomImage(byte[] bytes)
@@ -51,15 +50,25 @@ public class TestDicom : MonoBehaviour
     // Start is called before the first frame update
     IEnumerator Start()
     {
+        TextAsset textAsset = Resources.Load("CT-MONO2-16-brain") as TextAsset;
+        Stream stream = new MemoryStream(textAsset.bytes);
 
-        DicomImage dicom = new DicomImage(Application.dataPath + filePath);
+        var dcmfile = DicomFile.Open(stream);
+
+        Debug.Log("dcmfile: " + dcmfile.Format);
+             
+        var dcmimg = new DicomImage(dcmfile.Dataset);
+        Debug.Log("dcmimg: " + dcmimg.PhotometricInterpretation);
+             
+        var pix = dcmimg.GetPixelData();
+        Debug.Log("pix: " + pix.Width + " " + pix.Height);
 
         ReportLoaderImage loader = new ReportLoaderImage();
 
-        IPixelData pixeldata = loader.ExtractDataFromDicomImage(dicom);
+        IPixelData pixeldata = loader.ExtractDataFromDicomImage(dcmimg);
 
         // Create a new Texture2D
-        dicomTexture = new Texture2D((int)pixeldata.Width, (int)pixeldata.Height, TextureFormat.ARGB32, false);
+        Texture2D dicomTexture = new Texture2D((int)pixeldata.Width, (int)pixeldata.Height, TextureFormat.ARGB32, false);
 
         // Set filter type, or else its really blury
         dicomTexture.filterMode = FilterMode.Trilinear;
